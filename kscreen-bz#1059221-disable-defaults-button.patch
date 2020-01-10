@@ -1,0 +1,30 @@
+diff --git a/kcm/src/kcm_kscreen.cpp b/kcm/src/kcm_kscreen.cpp
+index ea1a490..2fa5776 100644
+--- a/kcm/src/kcm_kscreen.cpp
++++ b/kcm/src/kcm_kscreen.cpp
+@@ -66,6 +66,7 @@ KCMKScreen::KCMKScreen(QWidget* parent, const QVariantList& args) :
+ 
+     about->addAuthor(ki18n("Dan Vrátil"), ki18n("Maintainer") , "dvratil@redhat.com");
+     setAboutData(about);
++    setButtons( NoAdditionalButton );
+ 
+     m_outputTimer = new QTimer(this);
+     connect(m_outputTimer, SIGNAL(timeout()), SLOT(clearOutputIdentifiers()));
+@@ -127,6 +128,8 @@ bool KCMKScreen::x11EventFilter(void* message, long int* result)
+ 
+ void KCMKScreen::load()
+ {
++    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
++
+     kDebug() << "Loading...";
+ 
+     if (!m_declarativeView) {
+@@ -171,6 +174,8 @@ void KCMKScreen::load()
+     connect(outputView, SIGNAL(moveMouse(int,int)), SLOT(moveMouse(int,int)));
+     connect(outputView, SIGNAL(outputMousePressed()), SLOT(outputMousePressed()));
+     connect(outputView, SIGNAL(outputMouseReleased()), SLOT(outputMouseReleased()));
++
++    QApplication::restoreOverrideCursor();
+ }
+ 
+ void KCMKScreen::save()

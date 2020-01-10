@@ -1,12 +1,16 @@
 Name:           kscreen
 Epoch:          1
 Version:        1.0.1
-Release:        4%{?dist}
+Release:        9%{?dist}
 Summary:        KDE Display Management software
 # KDE e.V. may determine that future GPL versions are accepted
 License:        GPLv2 or GPLv3
 URL:            http://www.kde.org/ 
 Source0:        http://download.kde.org/stable/kscreen/kscreen-%{version}.tar.bz2
+
+Patch0:         kscreen-bz#1056251-check-max-active-screens-count.patch
+Patch1:	        kscreen-bz#1059221-disable-defaults-button.patch
+
 Requires:       libkscreen%{?_isa} = %{epoch}:%{version}
 BuildRequires:  kdelibs4-devel
 BuildRequires:  libkscreen-devel
@@ -20,6 +24,8 @@ KCM and KDED modules for managing displays in KDE.
 %prep
 %setup -q
 
+%patch0 -p1 -b .bz1056251
+%patch1 -p1 -b .bz1059221
 
 %build
 mkdir -p %{_target_platform}
@@ -52,6 +58,21 @@ make install/fast DESTDIR=%{buildroot} -C %{_target_platform}
 
 
 %changelog
+* Tue Feb 11 2014 Daniel Vrátil <dvratil@redhat.com> 1:1.0.1-9
+- Resolves: #1059221 - Disable 'Defaults' button
+
+* Tue Jan 28 2014 Daniel Vrátil <dvratil@redhat.com> 1:1.0.1-8
+ - Backport patch for RHBZ#1056251 from upstream
+
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1:1.0.1-7
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1:1.0.1-6
+- Mass rebuild 2013-12-27
+
+* Wed Dec 18 2013 Jan Grulich <jgrulich@redhat.com> - 1:1.0.1-5
+- Fix bogus date (#1043613)
+
 * Wed Aug 14 2013 Than Ngo <than@redhat.com> - 1:1.0.1-4
 - fix URL
 
@@ -101,7 +122,7 @@ make install/fast DESTDIR=%{buildroot} -C %{_target_platform}
 - License: GPLv2 or GPLv3
 - tighten %%files
 
-* Wed Jan 01 2013 Dan Vrátil <dvratil@redhat.com> 0.9.0-3.20121228git
+* Tue Jan 01 2013 Dan Vrátil <dvratil@redhat.com> 0.9.0-3.20121228git
  - Added qjson-devel to BuildRequires
 
 * Fri Dec 28 2012 Dan Vrátil <dvratil@redhat.com> 0.9.0-2.20121228git
